@@ -1,2 +1,4 @@
 venv/
 src/.env
+src/callbacks/__pycache__/
+src/handlers/__pycache__/
