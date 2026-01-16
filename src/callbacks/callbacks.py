@@ -1,3 +1,3 @@
 from aiogram import Router, F
 
-router = Router()
+router = Router() # Инициализация роутера
