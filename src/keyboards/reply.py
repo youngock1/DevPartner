@@ -6,7 +6,8 @@ main_kb = ReplyKeyboardMarkup(
     [
         [KeyboardButton(text='Смотреть анкеты'), KeyboardButton(text='Заполнить анкету заново'), KeyboardButton(text='Статистика')]
     ],
-    one_time_keyboard=True
+    one_time_keyboard=True,
+    resize_keyboard=True
 )
 
 ank_kb = ReplyKeyboardMarkup(
