@@ -9,8 +9,9 @@ main_kb = ReplyKeyboardMarkup(
         [KeyboardButton(text='Статистика 📊')],
         [KeyboardButton(text='Отключить анкету 💤')]
     ],
-    one_time_keyboard=True,
-    resize_keyboard=True
+    one_time_keyboard=False,
+    resize_keyboard=True,
+    input_field_placeholder="Выбери опцию ниже"
 )
 
 ank_kb = ReplyKeyboardMarkup(
@@ -20,5 +21,6 @@ ank_kb = ReplyKeyboardMarkup(
         [KeyboardButton(text='Дизлайк 👎')]
     ],
     resize_keyboard=True,
+    one_time_keyboard=False,
     input_field_placeholder="Выбери опцию ниже"
 )
