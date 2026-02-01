@@ -1,6 +1,8 @@
 from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
-import asyncio, logging, os
+import asyncio
+import logging
+import os
 from callbacks import callbacks
 from handlers import bot_messages, user_commands
 
@@ -9,6 +11,7 @@ load_dotenv()
 
 bot = Bot(token=os.getenv("BOT_TEST_TOKEN"))
 dp = Dispatcher()
+
 
 async def main():
     await bot.delete_webhook(drop_pending_updates=True)
