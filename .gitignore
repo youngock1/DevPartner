@@ -2,3 +2,8 @@ venv/
 src/.env
 src/callbacks/__pycache__/
 src/handlers/__pycache__/
+src/database/test.py
+src/database/test.db
+src/keyboards/__pycache__
+src/database/__pycache__
+test.db
