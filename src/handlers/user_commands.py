@@ -31,12 +31,32 @@ async def help_command(message: Message):
                          f"<b>/registr</b> - команда регистрации анкеты.\n\n"
                          f"Этот бот для поиска товарищей по коду, здесь ты сможешь найти их для общения, создания пет-проектов, а может быть даже и своего startup`a", 
                          parse_mode='html')
+    
+
+@router.message(Command("profile"))
+async def profile_command(message: Message):
+    data = test.read_user(message.from_user.id)
+    if data:
+        await message.answer_photo(photo=data[0][3], caption=f'ID:    {data[0][0]}\n'
+                                                          f'Name:  {data[0][1]}\n'
+                                                          f'Age:   {data[0][2]}\n'
+                                                          f'Stack: {data[0][4]}\n'
+                                                          f'City:  {data[0][5]}\n'
+                                                          f'About: {data[0][7]}\n'
+                                                          f'Registartion date:\n{data[0][6]}'
+                                   )
+    else:
+        await message.answer("Для отображения профиля, необходимо пройти регистрацию в боте.\n/registr")
 
 
 @router.message(Command('registr'))
 async def registration_command(message: Message, state: FSMContext):
-    await message.answer("Введите ваше имя и фамилию:")
-    await state.set_state(Form_anket.full_name)
+    if test.check_user(message.from_user.id):
+        await message.answer(f"Ты уже зарегестрирован, {message.from_user.first_name}!")
+        print(test.read_user(message.from_user.id))
+    else:
+        await message.answer("Введите ваше имя и фамилию:")
+        await state.set_state(Form_anket.full_name)
 
 
 @router.message(Form_anket.full_name)
@@ -83,5 +103,5 @@ async def get_about_self(message: Message, state: FSMContext):
     await state.update_data(about_self=message.text)
     data = await state.get_data()
     await state.clear()
-    test.create_user(id=message.from_user.id, full_name=data["full_name"], photo=str(data["photo"]), stack=data["stack"], city=data["city"],
+    test.create_user(id=message.from_user.id, full_name=data["full_name"], age=data["age"], photo=str(data["photo"]), stack=data["stack"], city=data["city"],
                               registration_date=datetime.datetime.now().strftime("%Y-%m-%d    %H:%M:%S"), about_self=data["about_self"], like=None)
