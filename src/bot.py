@@ -9,11 +9,12 @@ from handlers import bot_messages, user_commands
 load_dotenv()
 
 
-bot = Bot(token=os.getenv("BOT_TOKEN"))
+bot = Bot(token=os.getenv("BOT_TEST_TOKEN"))
 dp = Dispatcher()
 
 
 async def main():
+    await bot.delete_webhook(drop_pending_updates=True)
     dp.include_routers(
         callbacks.router,
         user_commands.router,

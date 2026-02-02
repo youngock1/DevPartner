@@ -14,8 +14,6 @@ async def handler_text(message: Message):
         pass
     elif message.text == 'Лайк 👍':
         pass
-    elif message.text == 'Написать ✍️':
-        pass
     elif message.text == 'Дизлайк 👎':
         pass
     elif message.text == 'Отключить анкету 💤':
