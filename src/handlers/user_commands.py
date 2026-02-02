@@ -9,18 +9,6 @@ import datetime
 
 router = Router()  # Инициализация роутера
 
-# Создаем клавиатуру
-main_keyboard = ReplyKeyboardMarkup(
-    keyboard=[
-        [KeyboardButton(text="Смотреть анкеты 🔥")],
-        [KeyboardButton(text="Заполнить анкету заново 🔄")],
-        [KeyboardButton(text="Статистика 📊")],
-        [KeyboardButton(text="Отключить анкету 💤")]
-    ],
-    resize_keyboard=True,
-    one_time_keyboard=False
-)
-
 class Form_anket(StatesGroup):
     full_name = State()
     age = State()
