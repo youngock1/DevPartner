@@ -4,7 +4,7 @@ import asyncio
 import logging
 import os
 from callbacks import callbacks
-from handlers import bot_messages, user_commands
+from handlers import bot_messages, user_commands, questionare
 
 load_dotenv()
 
@@ -18,6 +18,7 @@ async def main():
     dp.include_routers(
         callbacks.router,
         user_commands.router,
+        questionare.router,
         bot_messages.router
     )
     await dp.start_polling(bot)
