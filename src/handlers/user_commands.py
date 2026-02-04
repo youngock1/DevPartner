@@ -5,7 +5,6 @@ from keyboards import reply
 from aiogram.types import Message
 from aiogram import Router, F
 from database import test
-import datetime
 
 router = Router()  # Инициализация роутера
 
@@ -24,7 +23,7 @@ async def help_command(message: Message):
                          f"<b>/start</b> - перезапустить бота.\n"
                          f"<b>/help</b> - команда справки.\n"
                          f"<b>/registr</b> - команда регистрации анкеты.\n\n"
-                         f"Этот бот для людей, которые хотят создать свои IT-startups и проекты.С помощью этого бота ты сможешь найти себе товарища для кодинга, с которым сможешь разработать pet-project или startup, который в будущем станет популярным 👨‍💻\n\n"
+                         f"Этот бот для людей, которые хотят создать свои IT-startups и проекты. С помощью этого бота ты сможешь найти себе товарища для кодинга, с которым сможешь разработать pet-project или startup, который в будущем станет популярным 👨‍💻\n\n"
                          f"Обратная связь: @Ivan13112", 
                          parse_mode='html')
     
@@ -43,3 +42,9 @@ async def profile_command(message: Message):
                                    )
     else:
         await message.answer("Для отображения профиля, необходимо пройти регистрацию в боте.\n/registr")
+
+
+@router.message(Command("delete"))
+async def delete(message: Message):
+    test.delete_user(message.from_user.id)
+    await message.answer("Ваша анкета удалена!\n/registr")
