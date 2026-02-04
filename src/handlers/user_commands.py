@@ -12,16 +12,20 @@ router = Router()  # Инициализация роутера
 
 @router.message(CommandStart())
 async def start_command(message: Message):
-    await message.answer(f"Добро пожаловать в бота, {message.from_user.full_name}!", reply_markup=reply.main_kb)
+    await message.answer(f"Добро пожаловать в бота, {message.from_user.full_name}!"
+                         f"Этот бот для людей, которые хотят создать свои IT-startups и проекты.С помощью этого бота ты сможешь найти себе товарища для кодинга, с которым сможешь разработать pet-project или startup, который в будущем станет популярным 👨‍💻\n\n"
+                         f"Для справки: /help",
+                         reply_markup=reply.main_kb)
 
 
 @router.message(Command('help'))
 async def help_command(message: Message):
-    await message.answer(f"<b>Руководство бота:</b>\n\n"
+    await message.answer(f"<b>Справка бота:</b>\n\n"
                          f"<b>/start</b> - перезапустить бота.\n"
                          f"<b>/help</b> - команда справки.\n"
                          f"<b>/registr</b> - команда регистрации анкеты.\n\n"
-                         f"Этот бот для поиска товарищей по коду, здесь ты сможешь найти их для общения, создания пет-проектов, а может быть даже и своего startup`a", 
+                         f"Этот бот для людей, которые хотят создать свои IT-startups и проекты.С помощью этого бота ты сможешь найти себе товарища для кодинга, с которым сможешь разработать pet-project или startup, который в будущем станет популярным 👨‍💻\n\n"
+                         f"Обратная связь: @Ivan13112", 
                          parse_mode='html')
     
 
