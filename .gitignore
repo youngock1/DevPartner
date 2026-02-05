@@ -8,3 +8,4 @@ src/keyboards/__pycache__
 src/database/__pycache__
 test.db
 src/utils/__pycache__
+logic.txt
