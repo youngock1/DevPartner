@@ -10,5 +10,3 @@ async def main():
         host='localhost',
         port=5432
     )
-
-asyncio.run(main())
