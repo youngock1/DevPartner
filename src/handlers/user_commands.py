@@ -11,35 +11,46 @@ router = Router()  # Инициализация роутера
 
 @router.message(CommandStart())
 async def start_command(message: Message):
-    await message.answer(f"Добро пожаловать в бота, {message.from_user.full_name}!"
-                         f"Этот бот для людей, которые хотят создать свои IT-startups и проекты.С помощью этого бота ты сможешь найти себе товарища для кодинга, с которым сможешь разработать pet-project или startup, который в будущем станет популярным 👨‍💻\n\n"
-                         f"Для справки: /help",
-                         reply_markup=reply.main_kb)
+    if test.check_user(message.from_user.id):
+        await message.answer(f"<b>Добро пожаловать в бота, {message.from_user.full_name}!</b>\n\n"
+                             f"Этот бот для людей, которые хотят создать свои IT-startups и проекты.С помощью этого бота ты сможешь найти себе товарища для кодинга, с которым сможешь разработать pet-project или startup, который в будущем станет популярным 👨‍💻\n\n"
+                             f"<b>Для справки: /help</b>",
+                             reply_markup=reply.main_kb,
+                             parse_mode='html')
+    else:
+        await message.answer(f"<b>Добро пожаловать в бота, {message.from_user.full_name}!</b>\n\n"
+                             f"Этот бот для людей, которые хотят создать свои IT-startups и проекты.С помощью этого бота ты сможешь найти себе товарища для кодинга, с которым сможешь разработать pet-project или startup, который в будущем станет популярным 👨‍💻\n\n"
+                             f"<b>Для регистрации анкеты: /registr</b>",
+                             parse_mode='html')
 
 
 @router.message(Command('help'))
 async def help_command(message: Message):
     await message.answer(f"<b>Справка бота:</b>\n\n"
+                         f"Этот бот для людей, которые хотят создать свои IT-startups и проекты. С помощью этого бота ты сможешь найти себе товарища для кодинга, с которым сможешь разработать pet-project или startup, который в будущем станет популярным 👨‍💻\n\n"
+                         f"<b>Команды бота:</b>\n\n"
                          f"<b>/start</b> - перезапустить бота.\n"
                          f"<b>/help</b> - команда справки.\n"
-                         f"<b>/registr</b> - команда регистрации анкеты.\n\n"
-                         f"Этот бот для людей, которые хотят создать свои IT-startups и проекты. С помощью этого бота ты сможешь найти себе товарища для кодинга, с которым сможешь разработать pet-project или startup, который в будущем станет популярным 👨‍💻\n\n"
+                         f"<b>/registr</b> - команда регистрации анкеты.\n"
+                         f"<b>/profile</b> - вывод анкеты/профиля.\n"
+                         f"<b>/delete</b> - удалить свою анкету.\n\n"
                          f"Обратная связь: @Ivan13112", 
-                         parse_mode='html')
+                         parse_mode='html',
+                         reply_markup=reply.rm_kb)
     
 
 @router.message(Command("profile"))
 async def profile_command(message: Message):
     data = test.read_user(message.from_user.id)
     if data:
-        await message.answer_photo(photo=data[0][3], caption=f'ID:    {data[0][0]}\n'
-                                                          f'Name:  {data[0][1]}\n'
-                                                          f'Age:   {data[0][2]}\n'
-                                                          f'Stack: {data[0][4]}\n'
-                                                          f'City:  {data[0][5]}\n'
-                                                          f'About: {data[0][7]}\n'
-                                                          f'Registartion date:\n{data[0][6]}'
-                                   )
+        await message.answer_photo(photo=data[0][3], caption=f'<b>ID:</b>    {int(data[0][0])}\n'
+                                                          f'<b>Name:</b>  {data[0][1]}\n'
+                                                          f'<b>Age:</b>   {data[0][2]} years\n\n'
+                                                          f'<b>Stack:</b> {data[0][4]}\n'
+                                                          f'<b>City:</b>  {data[0][5]}\n\n'
+                                                          f'<b>About:</b> {data[0][7]}\n\n'
+                                                          f'<b>Registartion date:</b>\n{data[0][6]}',
+                                   parse_mode='html')
     else:
         await message.answer("Для отображения профиля, необходимо пройти регистрацию в боте.\n/registr")
 
