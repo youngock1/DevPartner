@@ -1,4 +1,6 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
+
+
 
 main_kb = ReplyKeyboardMarkup(
 
@@ -6,13 +8,13 @@ main_kb = ReplyKeyboardMarkup(
     [
         [KeyboardButton(text='Смотреть анкеты 🔥')],
         [KeyboardButton(text='Заполнить анкету заново 🔄')],
-        [KeyboardButton(text='Статистика 📊')],
         [KeyboardButton(text='Отключить анкету 💤')]
     ],
     one_time_keyboard=False,
     resize_keyboard=True,
     input_field_placeholder="Выбери опцию ниже"
 )
+
 
 ank_kb = ReplyKeyboardMarkup(
     keyboard=
@@ -24,3 +26,6 @@ ank_kb = ReplyKeyboardMarkup(
     one_time_keyboard=False,
     input_field_placeholder="Выбери опцию ниже"
 )
+
+
+rm_kb = ReplyKeyboardRemove()
