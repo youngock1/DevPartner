@@ -18,9 +18,9 @@ async def handler_text(message: Message, state: FSMContext):
         await state.set_state(Form_anket.full_name)
     elif message.text == 'Статистика 📊':
         pass
+    elif message.text == 'Отключить анкету 💤':
+        pass
     elif message.text == 'Лайк 👍':
         pass
     elif message.text == 'Дизлайк 👎':
-        pass
-    elif message.text == 'Отключить анкету 💤':
         pass
