@@ -6,7 +6,7 @@ main_kb = ReplyKeyboardMarkup(
 
     keyboard=
     [
-        [KeyboardButton(text='Смотреть анкеты 🔥')],
+        [KeyboardButton(text='Смотреть анкеты 🔍')],
         [KeyboardButton(text='Заполнить анкету заново 🔄')],
         [KeyboardButton(text='Отключить анкету 💤')]
     ],
@@ -19,8 +19,13 @@ main_kb = ReplyKeyboardMarkup(
 ank_kb = ReplyKeyboardMarkup(
     keyboard=
     [
-        [KeyboardButton(text='Лайк 👍')],
-        [KeyboardButton(text='Дизлайк 👎')]
+        [
+            KeyboardButton(text='Лайк 👍'),
+            KeyboardButton(text='Дизлайк 👎')
+        ],
+        [
+            KeyboardButton(text='In process...')
+        ]
     ],
     resize_keyboard=True,
     one_time_keyboard=False,

@@ -49,7 +49,7 @@ async def profile_command(message: Message):
                                                           f'<b>Stack:</b> {data[0][4]}\n'
                                                           f'<b>City:</b>  {data[0][5]}\n\n'
                                                           f'<b>About:</b> {data[0][7]}\n\n'
-                                                          f'<b>Registartion date:</b>\n{data[0][6]}',
+                                                          f'<b>Registartion date:</b>\n{data[0][6]}UTC(+3)',
                                    parse_mode='html')
     else:
         await message.answer("Для отображения профиля, необходимо пройти регистрацию в боте.\n/registr")
