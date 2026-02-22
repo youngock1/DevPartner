@@ -17,7 +17,7 @@ logging.basicConfig( # Настраиваем логгер
 
 async def main():
 
-    bot = Bot(token=os.getenv("BOT_TEST_TOKEN")) # Инициализация бота
+    bot = Bot(token=os.getenv("BOT_TOKEN")) # Инициализация бота
     dp = Dispatcher() # Инициализация диспетчера
 
     dp.include_routers( # Подключение Роутеров(обработчиков)
