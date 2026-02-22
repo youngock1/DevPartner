@@ -10,6 +10,11 @@ import logging, sys, os
 load_dotenv() # Загружаем переменные окружения
 
 
+logging.basicConfig( # Настраиваем логгер
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s')
+
+
 async def main():
 
     bot = Bot(token=os.getenv("BOT_TEST_TOKEN")) # Инициализация бота
@@ -21,7 +26,7 @@ async def main():
         questionare.router,
         bot_messages.router)
 
-    logging.info(f"INFO-DevPartner | IT - is launched at {datetime.datetime.now().strftime("%Y/%m/%d  %H:%M:%S")}") # Логирование запуска бота
+    logging.info(f"DevPartner | IT - is launched") # Логирование запуска бота
     await bot.delete_webhook(drop_pending_updates=True) # Удаление обновлений за АФК бота
     await dp.start_polling(bot) # Запуск polling бота
 
