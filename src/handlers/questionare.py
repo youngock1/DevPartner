@@ -4,18 +4,19 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 
 from utils.states import Form_anket
-from database import test
+from database import db
 
 import datetime, asyncio
 
 
-router = Router()
+router = Router() # Инициализация роутера
 
-@router.message(Command('registr'))
+
+@router.message(Command('registr')) # Обработчик команды /registr
 async def registration_command(message: Message, state: FSMContext):
-    if test.check_user(message.from_user.id):
+    if test.check_user(message.from_user.id): # Проверка в БД
         await message.answer(f"Ты уже зарегестрирован, {message.from_user.first_name}!")
-        print(test.read_user(message.from_user.id))
+        print(db.read_user(message.from_user.id))
     else:
         await message.answer("<b>Введите ваше имя и фамилию:</b>", parse_mode='html')
         await state.set_state(Form_anket.full_name)
@@ -68,7 +69,7 @@ async def get_about_self(message: Message, state: FSMContext):
         await state.clear()
         test.update_user(message.from_user.id, full_name=data["full_name"], age=data["age"], photo=str(data["photo"]), stack=data["stack"], city=data["city"], about_self=data["about_self"])
         await asyncio.sleep(0.1)
-        data = test.read_user(message.from_user.id)
+        data = db.read_user(message.from_user.id)
         if data:
             await message.answer_photo(photo=data[0][3], caption=f'<b>ID:</b>    {int(data[0][0])}\n'
                                                           f'<b>Name:</b>  {data[0][1]}\n'
@@ -85,7 +86,7 @@ async def get_about_self(message: Message, state: FSMContext):
         test.create_user(id=message.from_user.id, full_name=data["full_name"], age=data["age"], photo=str(data["photo"]), stack=data["stack"], city=data["city"],
                               registration_date=datetime.datetime.now().strftime("%Y-%m-%d    %H:%M:%S"), about_self=data["about_self"], like=None)
         await asyncio.sleep(0.1)
-        data = test.read_user(message.from_user.id)
+        data = db.read_user(message.from_user.id)
         if data:
             await message.answer_photo(photo=data[0][3], caption=f'<b>ID:</b>    {int(data[0][0])}\n'
                                                           f'<b>Name:</b>  {data[0][1]}\n'

@@ -11,7 +11,7 @@ from keyboards.reply import rm_kb
 router = Router() # Инифциализация роутера
 
 
-@router.message(F.text)
+@router.message(F.text) # Обработчик текста
 async def handler_text(message: Message, state: FSMContext):
     if message.text == 'Смотреть анкеты 🔍':
         pass
