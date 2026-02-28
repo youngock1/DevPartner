@@ -127,11 +127,8 @@ def test_create_users() -> None:
         )
 
         cursor.execute(
-            f"INSERT INTO users_ankets ({FIELDS_STRING}) VALUES ({
-                PLACEHOLDERS
-            })",
-            user_data
-        )
+            f"INSERT INTO users_ankets ({FIELDS_STRING}) VALUES ({PLACEHOLDERS})",
+            user_data)
         conn.commit()
 
         print(f"✓ Создана анкета #{user_id+1}: User_{user_id}")

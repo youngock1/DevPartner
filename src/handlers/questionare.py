@@ -9,6 +9,8 @@ from database import db
 import datetime
 import asyncio
 
+from keyboards.inline import get_update_anket_keyboard
+
 
 router = Router()
 
@@ -18,9 +20,10 @@ async def registration_command(message: Message, state: FSMContext):
     # ИСПРАВЛЕНО: test -> db
     if db.check_user(message.from_user.id):
         await message.answer(
-            f"Ты уже зарегестрирован, {message.from_user.first_name}!"
-        )
-        print(db.read_user(message.from_user.id))
+            "⚠️ <b>Вы точно хотите обновить свою анкету?</b>\n\n"
+            "Это действие нельзя будет отменить!",
+            reply_markup=get_update_anket_keyboard(),
+            parse_mode='html')
     else:
         await message.answer(
             "<b>Введите ваше имя и фамилию:</b>", parse_mode='html'
@@ -32,7 +35,9 @@ async def registration_command(message: Message, state: FSMContext):
 async def get_full_name(message: Message, state: FSMContext):
     await state.update_data(full_name=message.text)
     await state.set_state(Form_anket.age)
-    await message.answer("<b>Введите свой возраст:</b>", parse_mode='html')
+    await message.answer("<b>Я получил ваше имя</b> ✅\n\n"
+                        "<b>Теперь введите свой возраст:</b>", 
+                        parse_mode='html')
 
 
 @router.message(Form_anket.age)
@@ -40,7 +45,9 @@ async def get_age(message: Message, state: FSMContext):
     if message.text.isdigit():
         await state.update_data(age=message.text)
         await state.set_state(Form_anket.photo)
-        await message.answer("<b>Теперь скинь фото:</b>", parse_mode='html')
+        await message.answer("<b>Я получил ваш возраст</b> ✅\n\n"
+                            "<b>Теперь отправьте фото профиля:</b>",
+                            parse_mode='html')
     else:
         await message.answer(
             "<b>❌ Возраст должен быть числом.</b>\n\n"
@@ -54,8 +61,9 @@ async def get_photo(message: Message, state: FSMContext):
     photo_file_id = message.photo[-1].file_id
     await state.update_data(photo=photo_file_id)
     await state.set_state(Form_anket.stack)
-    await message.answer(
-        "<b>Введите свой stack-разработки:</b>", parse_mode='html'
+    await message.answer("<b>Я получил ваше фото профиля</b> ✅\n\n"
+                        "<b>Теперь введите свой stack-разработки:</b>",
+                        parse_mode='html'
     )
 
 
@@ -72,8 +80,9 @@ async def wrong_photo(message: Message, state: FSMContext):
 async def get_stack(message: Message, state: FSMContext):
     await state.update_data(stack=message.text)
     await state.set_state(Form_anket.city)
-    await message.answer(
-        "<b>Теперь введите свой город:</b>", parse_mode='html'
+    await message.answer("<b>Я получил ваш stack-разработки</b> ✅\n\n"
+                        "<b>Теперь введите свой город:</b>",
+                        parse_mode='html'
     )
 
 
@@ -81,7 +90,9 @@ async def get_stack(message: Message, state: FSMContext):
 async def get_city(message: Message, state: FSMContext):
     await state.update_data(city=message.text)
     await state.set_state(Form_anket.about_self)
-    await message.answer("<b>Теперь расскажите о себе:</b>", parse_mode='html')
+    await message.answer("<b>Я получил ваш город</b> ✅\n\n"
+                        "<b>Теперь расскажите о себе:</b>",
+                        parse_mode='html')
 
 
 @router.message(Form_anket.about_self)
