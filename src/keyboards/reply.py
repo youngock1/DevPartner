@@ -1,11 +1,11 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
-
+from aiogram.types import (ReplyKeyboardMarkup,
+                           KeyboardButton,
+                           ReplyKeyboardRemove)
 
 
 main_kb = ReplyKeyboardMarkup(
 
-    keyboard=
-    [
+    keyboard=[
         [KeyboardButton(text='Смотреть анкеты 🔍')],
         [KeyboardButton(text='Заполнить анкету заново 🔄')],
         [KeyboardButton(text='Отключить анкету 💤')]
@@ -17,8 +17,7 @@ main_kb = ReplyKeyboardMarkup(
 
 
 ank_kb = ReplyKeyboardMarkup(
-    keyboard=
-    [
+    keyboard=[
         [
             KeyboardButton(text='Лайк 👍'),
             KeyboardButton(text='Дизлайк 👎')

@@ -1,4 +1,4 @@
-.venv/
+venv/
 src/callbacks/__pycache__/
 src/handlers/__pycache__/
 src/keyboards/__pycache__
