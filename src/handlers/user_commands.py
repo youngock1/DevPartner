@@ -1,119 +1,86 @@
 from aiogram.filters import CommandStart, Command
-<<<<<<< HEAD
-from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
-from aiogram import Router
-=======
-from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import StatesGroup, State
-from keyboards import reply
-from aiogram.types import Message
 from aiogram import Router, F
-from database import test
-import datetime
->>>>>>> 7c9f1ad0eea2a4fe6b972cb8dd4e881b87179068
+from aiogram.types import Message, CallbackQuery
+from keyboards import reply
+from database import db
+
+from database import constants
+from keyboards.inline import get_delete_confirmation_keyboard
 
 router = Router()  # Инициализация роутера
 
-# Создаем клавиатуру
-main_keyboard = ReplyKeyboardMarkup(
-    keyboard=[
-        [KeyboardButton(text="Смотреть анкеты 🔥")],
-        [KeyboardButton(text="Заполнить анкету заново 🔄")],
-        [KeyboardButton(text="Статистика 📊")],
-        [KeyboardButton(text="Отключить анкету 💤")]
-    ],
-    resize_keyboard=True,
-    one_time_keyboard=False
-)
 
-class Form_anket(StatesGroup):
-    full_name = State()
-    age = State()
-    photo = State()
-    stack = State()
-    city = State()
-    about_self = State()
-
-
-@router.message(CommandStart())
+@router.message(CommandStart())  # Обработчик команды /start
 async def start_command(message: Message):
-<<<<<<< HEAD
-    await message.answer(
-        f"Добро пожаловать в бота, {message.from_user.full_name}!",
-        reply_markup=main_keyboard
-    )
+    full_name = message.from_user.full_name
+    if db.check_user(message.from_user.id):
+        await message.answer(
+            f"{constants.GREETING_PART_OF_MESSAGE.format(full_name=full_name)}"
+            f"{constants.DEFAULT_MESSAGE}"
+            f"<b>Для справки: /help</b>",
+            reply_markup=reply.main_kb,
+            parse_mode='html'
+        )
+    else:
+        await message.answer(
+            f"{constants.GREETING_PART_OF_MESSAGE.format(full_name=full_name)}"
+            f"{constants.DEFAULT_MESSAGE}"
+            f"<b>Для регистрации анкеты: /registr</b>",
+            parse_mode='html'
+        )
 
-@router.message(Command("help"))
+
+@router.message(Command('help'))  # Обработчик команды /help
 async def help_command(message: Message):
-    await message.answer("Помощь по использованию бота...")
-
-@router.message(Command("profile"))
-async def profile_command(message: Message):
-    await message.answer("Ваш профиль...")
-=======
-    await message.answer(f"Добро пожаловать в бота, {message.from_user.full_name}!", reply_markup=reply.main_kb)
-
-
-@router.message(Command('help'))
-async def help_command(message: Message):
-    await message.answer(f"<b>Руководство бота:</b>\n\n"
+    await message.answer(f"<b>Справка бота:</b>\n\n"
+                         f"{constants.DEFAULT_MESSAGE}"
+                         f"<b>Команды бота:</b>\n\n"
                          f"<b>/start</b> - перезапустить бота.\n"
                          f"<b>/help</b> - команда справки.\n"
-                         f"<b>/registr</b> - команда регистрации анкеты.\n\n"
-                         f"Этот бот для поиска товарищей по коду, здесь ты сможешь найти их для общени, создания пет-проекто, а может быть даже и своего startup`a", 
-                         parse_mode='html')
+                         f"<b>/registr</b> - команда регистрации анкеты.\n"
+                         f"<b>/profile</b> - вывод анкеты/профиля.\n"
+                         f"<b>/delete</b> - удалить свою анкету.\n\n"
+                         f"Обратная связь: @Ivan13112, @BBP42",
+                         parse_mode='html',
+                         reply_markup=reply.rm_kb)
 
 
-@router.message(Command('registr'))
-async def registration_command(message: Message, state: FSMContext):
-    await message.answer("Введите ваше имя и фамилию:")
-    await state.set_state(Form_anket.full_name)
-
-
-@router.message(Form_anket.full_name)
-async def get_full_name(message: Message, state: FSMContext):
-    await state.update_data(full_name=message.text)
-    await state.set_state(Form_anket.age)
-    await message.answer("Введите свой возраст:")
-
-
-@router.message(Form_anket.age)
-async def get_age(message: Message, state: FSMContext):
-    if message.text.isdigit():
-        await state.update_data(age=message.text)
-        await state.set_state(Form_anket.photo)
-        await message.answer("Теперь скинь фото:")
+@router.message(Command("profile"))  # Обработчик команды /profile
+async def profile_command(message: Message):
+    data = db.read_user(message.from_user.id)
+    if data:
+        await message.answer_photo(
+            photo=data[0][3], caption=f'<b>ID:</b>    {int(data[0][0])}\n'
+            f'<b>Name:</b>  {data[0][1]}\n'
+            f'<b>Age:</b>   {data[0][2]} years\n\n'
+            f'<b>Stack:</b> {data[0][4]}\n'
+            f'<b>City:</b>  {data[0][5]}\n\n'
+            f'<b>About:</b> {data[0][7]}\n\n'
+            f'<b>Registartion date:</b>\n{data[0][6]}UTC(+3)',
+            parse_mode='html'
+        )
     else:
-        await message.answer("Введите свой возраст:")
+        await message.answer(
+            "Для отображения профиля,"
+            " необходимо пройти регистрацию в боте.\n/registr"
+        )
 
 
-@router.message(Form_anket.photo, F.photo)
-async def get_photo(message: Message, state: FSMContext):
-    photo_file_id = message.photo[-1].file_id
-    await state.update_data(photo=photo_file_id)
-    await state.set_state(Form_anket.stack)
-    await message.answer("Введите свой stack-разработки:")
+@router.message(Command("delete"))  # Обработчик команды /delete
+async def delete_confirm(message: Message):
+    """Запрос подтверждения на удаление анкеты"""
 
+    # Проверяем, есть ли анкета у пользователя
+    if not db.check_user(message.from_user.id):
+        await message.answer(
+            "❌ У вас нет анкеты для удаления!\n\n"
+            "Создайте анкету: /registr"
+        )
+        return
 
-@router.message(Form_anket.stack)
-async def get_stack(message: Message, state: FSMContext):
-    await state.update_data(stack=message.text)
-    await state.set_state(Form_anket.city)
-    await message.answer("Теперь введите свой город:")
-
-
-@router.message(Form_anket.city)
-async def get_city(message: Message, state: FSMContext):
-    await state.update_data(city=message.text)
-    await state.set_state(Form_anket.about_self)
-    await message.answer("Теперь расскажите о себе:")
-
-
-@router.message(Form_anket.about_self)
-async def get_about_self(message: Message, state: FSMContext):
-    await state.update_data(about_self=message.text)
-    data = await state.get_data()
-    await state.clear()
-    test.create_user(id=message.from_user.id, full_name=data["full_name"], photo=str(data["photo"]), stack=data["stack"], city=data["city"],
-                              registration_date=datetime.datetime.now().strftime("%Y-%m-%d    %H:%M:%S"), about_self=data["about_self"], like=None)
->>>>>>> 7c9f1ad0eea2a4fe6b972cb8dd4e881b87179068
+    await message.answer(
+        "⚠️ <b>Вы точно хотите удалить свою анкету?</b>\n\n"
+        "Это действие нельзя будет отменить!",
+        reply_markup=get_delete_confirmation_keyboard(),
+        parse_mode='html'
+    )

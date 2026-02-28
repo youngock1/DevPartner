@@ -1,27 +1,53 @@
+from aiogram.exceptions import (TelegramAPIError,
+                                TelegramBadRequest,
+                                TelegramNetworkError)
+from handlers import bot_messages, user_commands, questionare
 from aiogram import Bot, Dispatcher
+from callbacks import callbacks
 from dotenv import load_dotenv
 import asyncio
 import logging
+import sys
 import os
-from callbacks import callbacks
-from handlers import bot_messages, user_commands
-
-load_dotenv()
 
 
-bot = Bot(token=os.getenv("BOT_TEST_TOKEN"))
-dp = Dispatcher()
+load_dotenv()  # Загружаем переменные окружения
+
+
+logging.basicConfig(  # Настраиваем логгер
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 async def main():
-    await bot.delete_webhook(drop_pending_updates=True)
-    dp.include_routers(
+
+    bot = Bot(token=os.getenv("BOT_TOKEN"))  # Инициализация бота
+    dp = Dispatcher()  # Инициализация диспетчера
+
+    dp.include_routers(  # Подключение Роутеров(обработчиков)
         callbacks.router,
         user_commands.router,
-        bot_messages.router
-    )
-    await dp.start_polling(bot)
+        questionare.router,
+        bot_messages.router)
+
+    logging.info("DevPartner | IT - is launched")  # Логирование запуска бота
+    # Удаление обновлений за АФК бота
+    await bot.delete_webhook(drop_pending_updates=True)
+    await dp.start_polling(bot)  # Запуск polling бота
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    try:
+        # Логирование всех обновлений в боте(абсолютно всех)
+        logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+        asyncio.run(main())  # Запуск бота
+    except TelegramNetworkError as error_network:
+        logging.info(f'Ошибка в подключении: {error_network}.')
+    except TelegramAPIError as error_api_connect:
+        logging.info(f'Ошибка в подключении API: {error_api_connect}.')
+    except TelegramBadRequest as error_bad_request:
+        logging.info(f'Некорректный запрос на сервер TG: {error_bad_request}.')
+    except KeyboardInterrupt:
+        logging.info(
+            'Прекращена работа программы сочетанием клавиш Cntrl + C.'
+            )
