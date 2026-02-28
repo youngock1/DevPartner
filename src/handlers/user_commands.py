@@ -84,33 +84,3 @@ async def delete_confirm(message: Message):
         reply_markup=get_delete_confirmation_keyboard(),
         parse_mode='html'
     )
-
-
-@router.callback_query(F.data == "confirm_delete")
-async def confirm_delete(callback: CallbackQuery):
-    """Подтверждение удаления анкеты"""
-
-    # Удаляем анкету
-    db.delete_user(callback.from_user.id)
-
-    await callback.message.edit_text(
-        "✅ <b>Ваша анкета успешно удалена!</b>\n\n"
-        "Если захотите вернуться, создайте новую анкету:\n"
-        "/registr",
-        parse_mode='html'
-    )
-
-    await callback.answer("Анкета удалена")
-
-
-@router.callback_query(F.data == "cancel_delete")
-async def cancel_delete(callback: CallbackQuery):
-    """Отмена удаления анкеты"""
-
-    await callback.message.edit_text(
-        "✅ <b>Удаление отменено!</b>\n\n"
-        "Ваша анкета сохранена.",
-        parse_mode='html'
-    )
-
-    await callback.answer("Удаление отменено")
