@@ -6,9 +6,13 @@ from aiogram.types import (ReplyKeyboardMarkup,
 main_kb = ReplyKeyboardMarkup(
 
     keyboard=[
-        [KeyboardButton(text='Смотреть анкеты 🔍')],
-        [KeyboardButton(text='Заполнить анкету заново 🔄')],
-        [KeyboardButton(text='Отключить анкету 💤')]
+        [
+            KeyboardButton(text='Смотреть анкеты 🔍'),
+            KeyboardButton(text='Заполнить анкету заново 🔄')
+        ],
+        [
+            KeyboardButton(text="Статистика 📊")
+        ]
     ],
     one_time_keyboard=False,
     resize_keyboard=True,
@@ -23,7 +27,9 @@ ank_kb = ReplyKeyboardMarkup(
             KeyboardButton(text='Дизлайк 👎')
         ],
         [
-            KeyboardButton(text='In process...')
+            
+            KeyboardButton(text='Прекратить просмотр 💤')
+            
         ]
     ],
     resize_keyboard=True,
