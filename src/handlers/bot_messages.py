@@ -128,6 +128,7 @@ async def show_next_anket(user_id: int, state: FSMContext):
     await show_anket(user_id, anket, state)
 
 
+# Обработчик ["Лайк 👍", "Дизлайк 👎"]
 @router.message(UserState.viewing_ankets, F.text.in_(["Лайк 👍", "Дизлайк 👎"]))
 async def handle_anket_action(message: Message, state: FSMContext):
     """Обрабатывает действия с анкетой"""
