@@ -1,6 +1,6 @@
 from aiogram.filters import CommandStart, Command
-from aiogram import Router, F
-from aiogram.types import Message, CallbackQuery
+from aiogram import Router
+from aiogram.types import Message
 from keyboards import reply
 from database import db
 

@@ -7,7 +7,6 @@ from utils.states import Form_anket
 from database import db
 
 import datetime
-import asyncio
 
 from keyboards.inline import get_update_anket_keyboard
 
@@ -17,7 +16,6 @@ router = Router()
 
 @router.message(Command('registr'))
 async def registration_command(message: Message, state: FSMContext):
-    # ИСПРАВЛЕНО: test -> db
     if db.check_user(message.from_user.id):
         await message.answer(
             "⚠️ <b>Вы точно хотите обновить свою анкету?</b>\n\n"
@@ -36,8 +34,8 @@ async def get_full_name(message: Message, state: FSMContext):
     await state.update_data(full_name=message.text)
     await state.set_state(Form_anket.age)
     await message.answer("<b>Я получил ваше имя</b> ✅\n\n"
-                        "<b>Теперь введите свой возраст:</b>", 
-                        parse_mode='html')
+                         "<b>Теперь введите свой возраст:</b>",
+                         parse_mode='html')
 
 
 @router.message(Form_anket.age)
@@ -46,8 +44,8 @@ async def get_age(message: Message, state: FSMContext):
         await state.update_data(age=message.text)
         await state.set_state(Form_anket.photo)
         await message.answer("<b>Я получил ваш возраст</b> ✅\n\n"
-                            "<b>Теперь отправьте фото профиля:</b>",
-                            parse_mode='html')
+                             "<b>Теперь отправьте фото профиля:</b>",
+                             parse_mode='html')
     else:
         await message.answer(
             "<b>❌ Возраст должен быть числом.</b>\n\n"
@@ -62,9 +60,9 @@ async def get_photo(message: Message, state: FSMContext):
     await state.update_data(photo=photo_file_id)
     await state.set_state(Form_anket.stack)
     await message.answer("<b>Я получил ваше фото профиля</b> ✅\n\n"
-                        "<b>Теперь введите свой stack-разработки:</b>",
-                        parse_mode='html'
-    )
+                         "<b>Теперь введите свой stack-разработки:</b>",
+                         parse_mode='html'
+                         )
 
 
 @router.message(Form_anket.photo)
@@ -81,9 +79,9 @@ async def get_stack(message: Message, state: FSMContext):
     await state.update_data(stack=message.text)
     await state.set_state(Form_anket.city)
     await message.answer("<b>Я получил ваш stack-разработки</b> ✅\n\n"
-                        "<b>Теперь введите свой город:</b>",
-                        parse_mode='html'
-    )
+                         "<b>Теперь введите свой город:</b>",
+                         parse_mode='html'
+                         )
 
 
 @router.message(Form_anket.city)
@@ -91,70 +89,125 @@ async def get_city(message: Message, state: FSMContext):
     await state.update_data(city=message.text)
     await state.set_state(Form_anket.about_self)
     await message.answer("<b>Я получил ваш город</b> ✅\n\n"
-                        "<b>Теперь расскажите о себе:</b>",
-                        parse_mode='html')
+                         "<b>Теперь расскажите о себе:</b>",
+                         parse_mode='html')
+
+
+def format_user_data(user_data):
+    """Форматирует данные пользователя для отображения"""
+    if not user_data:
+        return None
+
+    # Если user_data - это список кортежей/списков
+    if isinstance(user_data, list) and len(user_data) > 0:
+        user = user_data[0]
+        if isinstance(user, (list, tuple)):
+            return {
+                'id': user[0],
+                'full_name': user[1],
+                'age': user[2],
+                'photo': user[3],
+                'stack': user[4],
+                'city': user[5],
+                'registration_date': user[6],
+                'about_self': user[7]
+            }
+    # Если user_data - это словарь
+    elif isinstance(user_data, dict):
+        return user_data
+
+    return None
 
 
 @router.message(Form_anket.about_self)
 async def get_about_self(message: Message, state: FSMContext):
-    # ИСПРАВЛЕНО: test -> db
-    if db.check_user(message.from_user.id):
-        await state.update_data(about_self=message.text)
+    about_self = message.text
+    user_id = message.from_user.id
+    username = message.from_user.username
+
+    # Проверяем, существует ли пользователь
+    if db.check_user(user_id):
+        # Обновляем существующего пользователя
+        await state.update_data(about_self=about_self)
         data = await state.get_data()
         await state.clear()
-        # ИСПРАВЛЕНО: test -> db
+
         db.update_user(
-            message.from_user.id,
+            user_id,
             full_name=data["full_name"],
-            age=data["age"],
+            age=int(data["age"]),
             photo=str(data["photo"]),
             stack=data["stack"],
             city=data["city"],
             about_self=data["about_self"]
         )
-        await asyncio.sleep(0.1)
-        data = db.read_user(message.from_user.id)
-        if data:
+
+        # Получаем обновленные данные
+        user_data = db.read_user(user_id)
+        formatted_data = format_user_data(user_data)
+
+        if formatted_data:
+            caption = (
+                f"<b>ID:</b> {formatted_data['id']}\n"
+                f"<b>Имя:</b> {formatted_data['full_name']}\n"
+                f"<b>Возраст:</b> {formatted_data['age']} лет\n\n"
+                f"<b>Стек:</b> {formatted_data['stack']}\n"
+                f"<b>Город:</b> {formatted_data['city']}\n\n"
+                f"<b>О себе:</b> {formatted_data['about_self']}\n\n"
+                f"<b>Дата регистрации:</b>\n{formatted_data[
+                    'registration_date'
+                ]} UTC(+3)"
+            )
+
             await message.answer_photo(
-                photo=data[0][3],
-                caption=f'<b>ID:</b>    {int(data[0][0])}\n'
-                f'<b>Name:</b>  {data[0][1]}\n'
-                f'<b>Age:</b>   {data[0][2]} years\n\n'
-                f'<b>Stack:</b> {data[0][4]}\n'
-                f'<b>City:</b>  {data[0][5]}\n\n'
-                f'<b>About:</b> {data[0][7]}\n\n'
-                f'<b>Registration date:</b>\n{data[0][6]}UTC(+3)',
+                photo=formatted_data['photo'],
+                caption=caption,
                 parse_mode='html'
             )
+        else:
+            await message.answer("✅ Анкета обновлена!")
+
     else:
-        await state.update_data(about_self=message.text)
+        # Создаем нового пользователя
+        await state.update_data(about_self=about_self)
         data = await state.get_data()
         await state.clear()
-        # ИСПРАВЛЕНО: test -> db
+
         db.create_user(
-            id=message.from_user.id,
+            id=user_id,
             full_name=data["full_name"],
-            age=data["age"],
+            age=int(data["age"]),
             photo=str(data["photo"]),
             stack=data["stack"],
             city=data["city"],
-            registration_date=(
-                datetime.datetime.now().strftime("%Y-%m-%d    %H:%M:%S")
+            registration_date=datetime.datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
             ),
             about_self=data["about_self"],
-            like=None
+            username=username  # Сохраняем username
         )
-        await asyncio.sleep(0.1)
-        data = db.read_user(message.from_user.id)
-        if data:
+
+        # Получаем созданные данные
+        user_data = db.read_user(user_id)
+        formatted_data = format_user_data(user_data)
+
+        if formatted_data:
+            caption = (
+                f"<b>ID:</b> {formatted_data['id']}\n"
+                f"<b>Имя:</b> {formatted_data['full_name']}\n"
+                f"<b>Возраст:</b> {formatted_data['age']} лет\n\n"
+                f"<b>Стек:</b> {formatted_data['stack']}\n"
+                f"<b>Город:</b> {formatted_data['city']}\n\n"
+                f"<b>О себе:</b> {formatted_data['about_self']}\n\n"
+                f"<b>Дата регистрации:</b>\n{formatted_data[
+                    'registration_date'
+                ]} UTC(+3)"
+            )
+
             await message.answer_photo(
-                photo=data[0][3],
-                caption=f'<b>ID:</b>    {int(data[0][0])}\n'
-                f'<b>Name:</b>  {data[0][1]}\n'
-                f'<b>Age:</b>   {data[0][2]} years\n\n'
-                f'<b>Stack:</b> {data[0][4]}\n'
-                f'<b>City:</b>  {data[0][5]}\n\n'
-                f'<b>About:</b> {data[0][7]}\n\n'
-                f'<b>Registration date:</b>\n{data[0][6]}UTC(+3)',
+                photo=formatted_data['photo'],
+                caption=caption,
                 parse_mode='html'
             )
+        else:
+            await message.answer("✅ Анкета создана!")

@@ -2,40 +2,20 @@ from aiogram.types import (ReplyKeyboardMarkup,
                            KeyboardButton,
                            ReplyKeyboardRemove)
 
+# Основная клавиатура
+main_kb = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text='Смотреть анкеты 🔍')],
+    [KeyboardButton(text='Статистика 📊')],
+    [KeyboardButton(text='Мои лайки 👍'), KeyboardButton(
+        text='Кто лайкнул меня')],
+    [KeyboardButton(text='Заполнить анкету заново 🔄')]
+], resize_keyboard=True, input_field_placeholder='Выберите действие...')
 
-main_kb = ReplyKeyboardMarkup(
+# Клавиатура для просмотра анкет
+ank_kb = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text='Лайк 👍'), KeyboardButton(text='Дизлайк 👎')],
+    [KeyboardButton(text='Прекратить просмотр 💤')]
+], resize_keyboard=True)
 
-    keyboard=[
-        [
-            KeyboardButton(text='Смотреть анкеты 🔍'),
-            KeyboardButton(text='Заполнить анкету заново 🔄')
-        ],
-        [
-            KeyboardButton(text="Статистика 📊")
-        ]
-    ],
-    one_time_keyboard=False,
-    resize_keyboard=True,
-    input_field_placeholder="Выбери опцию ниже"
-)
-
-
-ank_kb = ReplyKeyboardMarkup(
-    keyboard=[
-        [
-            KeyboardButton(text='Лайк 👍'),
-            KeyboardButton(text='Дизлайк 👎')
-        ],
-        [
-            
-            KeyboardButton(text='Прекратить просмотр 💤')
-            
-        ]
-    ],
-    resize_keyboard=True,
-    one_time_keyboard=False,
-    input_field_placeholder="Выбери опцию ниже"
-)
-
-
+# Клавиатура удаления
 rm_kb = ReplyKeyboardRemove()
