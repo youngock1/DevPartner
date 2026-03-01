@@ -124,6 +124,7 @@ async def handle_anket_action(message: Message, state: FSMContext):
             f"👍 Лайк для {current_anket[1]} отправлен!"
         )
         await bot.send_message(chat_id=current_anket[0], text=f'Ты понравился {user[0][1]}')
+        
 
     
     elif message.text == "Дизлайк 👎":
