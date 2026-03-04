@@ -8,9 +8,11 @@ from utils.states import UserData, UserState
 from keyboards.reply import main_kb, ank_kb
 from keyboards.inline import get_update_anket_keyboard, get_profile_keyboard
 
-from database import db
+from database import db, crud
 
 import logging
+
+db = crud.DatabaseManager()
 
 
 # Настройка логирования

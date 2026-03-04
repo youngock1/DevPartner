@@ -1,2 +1,4 @@
 aiogram==3.24.0
 python-dotenv==1.2.1
+sqlalchemy==2.0.48
+greenlet==3.3.2
