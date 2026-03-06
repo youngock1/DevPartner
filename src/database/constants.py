@@ -1,3 +1,5 @@
+SQLALCHEMY_DATABASE_URI = "sqlite:///test.db"
+
 USER_FIELDS = ('id', 'full_name', 'age', 'photo', 'stack',
                'city', 'registration_date', 'about_self', 'like')
 
@@ -12,3 +14,9 @@ DEFAULT_MESSAGE = (
     "с которым сможешь разработать pet-project или startup, "
     "который в будущем станет популярным 👨‍💻\n\n"
 )
+
+DATETIME_FORM = "%Y-%m-%d %H:%M:%S"
+
+ADMIN_IDS = [6189980844, 5200695723]
+
+SECRET_KEY = "1975"

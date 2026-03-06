@@ -367,7 +367,8 @@ def test_create_users() -> None:
         )
 
         cursor.execute(
-            f"INSERT INTO users_ankets ({FIELDS_STRING}) VALUES ({PLACEHOLDERS})",
+            (f"INSERT INTO users_ankets ({FIELDS_STRING}) "
+             f"VALUES ({PLACEHOLDERS})"),
             user_data
         )
         conn.commit()

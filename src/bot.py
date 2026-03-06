@@ -3,6 +3,7 @@ from aiogram.exceptions import (TelegramAPIError,
                                 TelegramNetworkError)
 from handlers import bot_messages, user_commands, questionare
 from aiogram import Bot, Dispatcher
+from aiogram.fsm.storage.memory import MemoryStorage
 from callbacks import callbacks
 from dotenv import load_dotenv
 import asyncio
@@ -10,6 +11,7 @@ import logging
 import sys
 import os
 
+from handlers.admin_commands import router as admin_router
 
 load_dotenv()  # Загружаем переменные окружения
 
@@ -22,9 +24,11 @@ logging.basicConfig(  # Настраиваем логгер
 async def main():
 
     bot = Bot(token=os.getenv("BOT_TOKEN"))  # Инициализация бота
-    dp = Dispatcher()  # Инициализация диспетчера
+    storage = MemoryStorage()
+    dp = Dispatcher(storage=storage)
 
     dp.include_routers(  # Подключение Роутеров(обработчиков)
+        admin_router,
         callbacks.router,
         user_commands.router,
         questionare.router,
@@ -50,4 +54,4 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         logging.info(
             'Прекращена работа программы сочетанием клавиш Cntrl + C.'
-            )
+        )

@@ -8,7 +8,7 @@ from utils.states import UserData, UserState
 from keyboards.reply import main_kb, ank_kb
 from keyboards.inline import get_update_anket_keyboard, get_profile_keyboard
 
-from database import db, crud
+from database import crud
 
 import logging
 
@@ -207,8 +207,13 @@ async def handle_anket_action(message: Message, state: FSMContext):
         # Если лайк взаимный - отправляем специальное уведомление обоим
         if is_mutual and liked_user:
             # Подготавливаем контакты
-            user1_contact = f"@{message.from_user.username}" if message.from_user.username else current_user['full_name']
-            user2_contact = f"@{current_anket.get('username')}" if current_anket.get('username') else current_anket['full_name']
+            user1_contact = (f"@{message.from_user.username}"
+                             if message.from_user.username
+                             else current_user['full_name'])
+            user2_contact = (f"@{current_anket.get('username')}"
+                             if current_anket.get('username')
+                             else
+                             current_anket['full_name'])
 
             # Уведомление текущему пользователю
             await message.answer(
@@ -232,7 +237,9 @@ async def handle_anket_action(message: Message, state: FSMContext):
                 )
             except Exception as e:
                 logging.error(
-                    f"Не удалось отправить уведомление о взаимной симпатии: {e}"
+                    f"Не удалось отправить уведомление о взаимной симпатии: {
+                        e
+                    }"
                 )
 
     elif message.text == "Дизлайк 👎":

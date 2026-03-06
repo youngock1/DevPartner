@@ -1,7 +1,17 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey, UniqueConstraint, CheckConstraint
+from sqlalchemy import (
+    create_engine,
+    Column,
+    Integer,
+    String,
+    Text,
+    ForeignKey,
+    UniqueConstraint
+)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from datetime import datetime
+
+from . import constants
 
 Base = declarative_base()
 
@@ -15,7 +25,10 @@ class User(Base):
     photo = Column(String(255))
     stack = Column(Text)
     city = Column(String(100))
-    registration_date = Column(String(20), default=lambda: datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    registration_date = Column(
+        String(20), default=lambda: datetime.now().strftime(
+            constants.DATETIME_FORM
+        ))
     about_self = Column(Text)
     like = Column(String(10), nullable=True)
 
@@ -70,17 +83,25 @@ class Like(Base):
     )
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey('users_ankets.id', ondelete='CASCADE'), nullable=False)
-    liked_user_id = Column(Integer, ForeignKey('users_ankets.id', ondelete='CASCADE'), nullable=False)
-    created_at = Column(String(20), default=lambda: datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    user_id = Column(Integer, ForeignKey(
+        'users_ankets.id', ondelete='CASCADE'), nullable=False)
+    liked_user_id = Column(Integer, ForeignKey(
+        'users_ankets.id', ondelete='CASCADE'), nullable=False)
+    created_at = Column(
+        String(20), default=lambda: datetime.now().strftime(
+            constants.DATETIME_FORM
+        ))
     is_mutual = Column(Integer, default=0)
 
     # Relationships
-    user = relationship('User', foreign_keys=[user_id], back_populates='likes_given')
-    liked_user = relationship('User', foreign_keys=[liked_user_id], back_populates='likes_received')
+    user = relationship('User', foreign_keys=[
+                        user_id], back_populates='likes_given')
+    liked_user = relationship('User', foreign_keys=[
+                              liked_user_id], back_populates='likes_received')
 
     def __repr__(self):
-        return f"<Like(id={self.id}, user={self.user_id} -> {self.liked_user_id}, mutual={self.is_mutual})>"
+        return (f"<Like(id={self.id}, user={self.user_id} -> "
+                f"{self.liked_user_id}, mutual={self.is_mutual})>")
 
     def to_dict(self):
         """Convert like object to dictionary"""
@@ -100,16 +121,27 @@ class Dislike(Base):
     )
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey('users_ankets.id', ondelete='CASCADE'), nullable=False)
-    disliked_user_id = Column(Integer, ForeignKey('users_ankets.id', ondelete='CASCADE'), nullable=False)
-    created_at = Column(String(20), default=lambda: datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    user_id = Column(Integer, ForeignKey(
+        'users_ankets.id', ondelete='CASCADE'), nullable=False)
+    disliked_user_id = Column(Integer, ForeignKey(
+        'users_ankets.id', ondelete='CASCADE'), nullable=False)
+    created_at = Column(
+        String(20), default=lambda: datetime.now().strftime(
+            constants.DATETIME_FORM
+        ))
 
     # Relationships
-    user = relationship('User', foreign_keys=[user_id], back_populates='dislikes_given')
-    disliked_user = relationship('User', foreign_keys=[disliked_user_id], back_populates='dislikes_received')
+    user = relationship('User', foreign_keys=[
+                        user_id], back_populates='dislikes_given')
+    disliked_user = relationship(
+        'User',
+        foreign_keys=[disliked_user_id],
+        back_populates='dislikes_received'
+    )
 
     def __repr__(self):
-        return f"<Dislike(id={self.id}, user={self.user_id} -> {self.disliked_user_id})>"
+        return (f"<Dislike(id={self.id}, user={self.user_id} -> "
+                f"{self.disliked_user_id})>")
 
     def to_dict(self):
         """Convert dislike object to dictionary"""
@@ -121,9 +153,17 @@ class Dislike(Base):
         }
 
 
-def init_db(db_path='sqlite:///test.db'):
+def init_db(db_path=None):
     """Initialize database and create tables"""
-    engine = create_engine(db_path, echo=False, connect_args={'check_same_thread': False})
+    if db_path is None:
+        db_path = 'sqlite:///test.db'  # Запасной вариант
+
+    # Убедимся, что db_path - строка
+    if not isinstance(db_path, str):
+        db_path = 'sqlite:///test.db'
+
+    engine = create_engine(db_path, echo=False, connect_args={
+                           'check_same_thread': False})
     Base.metadata.create_all(engine)
     return engine
 

@@ -1,5 +1,7 @@
 from aiogram.fsm.state import StatesGroup, State
 from datetime import datetime
+from typing import Set
+
 
 # Класс для управления состоянием регистрации анкет
 class Form_anket(StatesGroup):
@@ -8,12 +10,12 @@ class Form_anket(StatesGroup):
     photo = State()      # Состояние получения фотографии пользователя
     stack = State()      # Состояние получения стэка разработки пользователя
     city = State()       # Состояние получения города пользователя
-    about_self = State() # Состояние получения описания о себе пользователя
+    about_self = State()  # Состояние получения описания о себе пользователя
 
 
 # Класс для управления состоянием пользователя
 class UserState(StatesGroup):
-    viewing_ankets = State() # Состояние просмотра анкет
+    viewing_ankets = State()  # Состояние просмотра анкет
 
 
 # Класс для хранения данных пользователя
