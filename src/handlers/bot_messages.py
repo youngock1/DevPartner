@@ -237,9 +237,7 @@ async def handle_anket_action(message: Message, state: FSMContext):
                 )
             except Exception as e:
                 logging.error(
-                    f"Не удалось отправить уведомление о взаимной симпатии: {
-                        e
-                    }"
+                    f"Не удалось отправить уведомление о взаимной симпатии: {e}"
                 )
 
     elif message.text == "Дизлайк 👎":
@@ -366,7 +364,7 @@ async def show_stats(message: Message):
 
 
 @router.message(F.text == "Мои лайки 👍")
-async def show_my_likes(message: Message):
+async def show_my_likes(message: Message, bot: Bot):
     """Показывает кого лайкнул пользователь"""
     user_id = message.from_user.id
 
@@ -378,15 +376,13 @@ async def show_my_likes(message: Message):
 
     text = "👤 <b>Кого ты лайкнул(а):</b>\n\n"
     for user in likes_given:
-        text += f"• {user['full_name']}, {user['age']} лет - @{user.get(
-            'username',
-            'нет'
-        )}\n"
+        chat = await bot.get_chat(user['id'])
+        text += f"• {user['full_name']}, {user['age']} лет - @{chat.username}\n"
 
     await message.answer(text, parse_mode='HTML')
 
 
-@router.message(F.text == "Кто лайкнул меня")
+@router.message(F.text == "Кто лайкнул меня 🩷")
 async def show_who_liked_me(message: Message):
     """Показывает кто лайкнул пользователя"""
     user_id = message.from_user.id
@@ -399,9 +395,8 @@ async def show_who_liked_me(message: Message):
 
     text = "<b>Кто тебя лайкнул(а):</b>\n\n"
     for user in likes_received:
-        text += f"• {user['full_name']}, {user['age']} лет - @{user.get(
-            'username',
-            ' у пользователя нет username')}\n"
+        chat = await bot.get_chat(user['id'])
+        text += f"• {user['full_name']}, {user['age']} лет - @{chat.username}\n"
 
     await message.answer(text, parse_mode='HTML')
 

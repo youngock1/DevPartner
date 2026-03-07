@@ -7,7 +7,7 @@ main_kb = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='Смотреть анкеты 🔍')],
     [KeyboardButton(text='Статистика 📊')],
     [KeyboardButton(text='Мои лайки 👍'), KeyboardButton(
-        text='Кто лайкнул меня')],
+        text='Кто лайкнул меня 🩷')],
     [KeyboardButton(text='Заполнить анкету заново 🔄')]
 ], resize_keyboard=True, input_field_placeholder='Выберите действие...')
 
