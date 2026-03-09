@@ -368,7 +368,7 @@ async def show_my_likes(message: Message, bot: Bot):
     """Показывает кого лайкнул пользователь"""
     user_id = message.from_user.id
 
-    likes_given = db.get_likes_given(user_id)
+    likes_given = db.get_likes_given(user_id)[:10]
 
     if not likes_given:
         await message.answer("Ты ещё никого не лайкнул(а)")
@@ -387,7 +387,7 @@ async def show_who_liked_me(message: Message):
     """Показывает кто лайкнул пользователя"""
     user_id = message.from_user.id
 
-    likes_received = db.get_likes_received(user_id)
+    likes_received = db.get_likes_received(user_id)[:10]
 
     if not likes_received:
         await message.answer("Тебя пока никто не лайкнул(а)")

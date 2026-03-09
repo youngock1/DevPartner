@@ -4,14 +4,16 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 
 from utils.states import Form_anket
-from database import db
+from database.crud import DatabaseManager
 
 import datetime
 
 from keyboards.inline import get_update_anket_keyboard
-
+from keyboards.reply import main_kb
 
 router = Router()
+
+db = DatabaseManager()
 
 
 @router.message(Command('registr'))
@@ -162,7 +164,8 @@ async def get_about_self(message: Message, state: FSMContext):
             await message.answer_photo(
                 photo=formatted_data['photo'],
                 caption=caption,
-                parse_mode='html'
+                parse_mode='html',
+                reply_markup=main_kb
             )
         else:
             await message.answer("✅ Анкета обновлена!")
@@ -183,8 +186,7 @@ async def get_about_self(message: Message, state: FSMContext):
             registration_date=datetime.datetime.now().strftime(
                 "%Y-%m-%d %H:%M:%S"
             ),
-            about_self=data["about_self"],
-            username=username  # Сохраняем username
+            about_self=data["about_self"]
         )
 
         # Получаем созданные данные
@@ -207,7 +209,8 @@ async def get_about_self(message: Message, state: FSMContext):
             await message.answer_photo(
                 photo=formatted_data['photo'],
                 caption=caption,
-                parse_mode='html'
+                parse_mode='html',
+                reply_markup=main_kb
             )
         else:
             await message.answer("✅ Анкета создана!")
