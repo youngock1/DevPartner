@@ -177,9 +177,7 @@ async def handle_anket_action(message: Message, state: FSMContext):
             # Формируем текст уведомления
             notification_text = (
                 f"🔔 <b>Новый лайк!</b>\n\n"
-                f"👤 <b>{current_user[
-                    'full_name'
-                ]}</b> лайкнул(а) твою анкету!\n"
+                f"👤 <b>{current_user['full_name']}</b> лайкнул(а) твою анкету!\n"
                 f"💬 Напиши ему(ей): {contact_display}\n\n"
                 f"📊 Посмотреть все лайки: «Кто лайкнул меня»"
             )
@@ -227,9 +225,7 @@ async def handle_anket_action(message: Message, state: FSMContext):
                 await bot.send_message(
                     chat_id=current_anket['id'],
                     text=(
-                        f"❤️ {current_user[
-                            'full_name'
-                        ]} тоже лайкнул(а) тебя!\n"
+                        f"❤️ {current_user['full_name']} тоже лайкнул(а) тебя!\n"
                         f"👤 Контакт: {user1_contact}\n\n"
                         f"💬 Напишите друг другу!"
                     ),
