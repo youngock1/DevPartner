@@ -25,8 +25,8 @@ async def registration_command(message: Message, state: FSMContext):
             reply_markup=get_update_anket_keyboard(),
             parse_mode='html')
     else:
-        await message.answer("✅ <b>Начинаем регистрацию...</b>", parse_mode='html')
         await message.answer(
+            "✅ <b>Начинаем регистрацию...</b>\n\n"
             "<b>Введите ваше имя и фамилию:</b>", parse_mode='html'
         )
         await state.set_state(Form_anket.full_name)
@@ -43,7 +43,7 @@ async def get_full_name(message: Message, state: FSMContext):
 
 @router.message(Form_anket.age)
 async def get_age(message: Message, state: FSMContext):
-    if message.text.isdigit():
+    if message.text and message.text.isdigit():
         await state.update_data(age=message.text)
         await state.set_state(Form_anket.photo)
         await message.answer("<b>Я получил ваш возраст</b> ✅\n\n"
@@ -79,22 +79,29 @@ async def wrong_photo(message: Message, state: FSMContext):
 
 @router.message(Form_anket.stack)
 async def get_stack(message: Message, state: FSMContext):
-    await state.update_data(stack=message.text)
-    await state.set_state(Form_anket.city)
-    await message.answer("<b>Я получил ваш stack-разработки</b> ✅\n\n"
-                         "<b>Теперь введите свой город:</b>",
-                         parse_mode='html'
-                         )
+    if message.text:
+        await state.update_data(stack=message.text)
+        await state.set_state(Form_anket.city)
+        await message.answer("<b>Я получил ваш stack-разработки</b> ✅\n\n"
+                            "<b>Теперь введите свой город:</b>",
+                            parse_mode='html'
+                            )
+    else:
+        await message.answer(f"<b>❌ Введите пожалуйста свой stack(ЯП) или None.</b>",
+                            parse_mode='html')
 
 
 @router.message(Form_anket.city)
 async def get_city(message: Message, state: FSMContext):
-    await state.update_data(city=message.text)
-    await state.set_state(Form_anket.about_self)
-    await message.answer("<b>Я получил ваш город</b> ✅\n\n"
-                         "<b>Теперь расскажите о себе:</b>",
-                         parse_mode='html')
-
+    if message.text:
+        await state.update_data(city=message.text)
+        await state.set_state(Form_anket.about_self)
+        await message.answer("<b>Я получил ваш город</b> ✅\n\n"
+                            "<b>Теперь расскажите о себе:</b>",
+                            parse_mode='html')
+    else:
+        await message.answer(f"<b>❌ Введите пожалуйста свой город или None.</b>",
+                            parse_mode='html')
 
 def format_user_data(user_data):
     """Форматирует данные пользователя для отображения"""

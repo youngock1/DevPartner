@@ -40,7 +40,8 @@ async def help_command(message: Message):
                          f"<b>/registr</b> - команда регистрации анкеты.\n"
                          f"<b>/profile</b> - вывод анкеты/профиля.\n"
                          f"<b>/delete</b> - удалить свою анкету.\n\n"
-                         f"Обратная связь: @Ivan13112, @BBP42",
+                         f"<b>Обратная связь: 👨‍💻 @Ivan13112, 👨‍💻 @BBP42</b>\n\n"
+                         f"<b>👥 TG channel: https://t.me/DevPartner1</b>",
                          parse_mode='html',
                          reply_markup=reply.rm_kb)
 

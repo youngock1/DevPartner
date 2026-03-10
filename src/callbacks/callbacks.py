@@ -2,6 +2,8 @@ from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from database import db
 
+from keyboards.reply import rm_kb
+
 from utils.states import Form_anket
 from aiogram.fsm.context import FSMContext
 import logging
