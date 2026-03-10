@@ -50,7 +50,7 @@ class DatabaseManager:
         return False
 
     def check_user(self, id: int) -> bool:
-        """Есть пользователб в БД"""
+        """Есть пользователь в БД"""
         return self.session.query(
             User
         ).filter(User.id == id).first() is not None

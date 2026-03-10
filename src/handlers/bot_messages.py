@@ -177,9 +177,7 @@ async def handle_anket_action(message: Message, state: FSMContext):
             # Формируем текст уведомления
             notification_text = (
                 f"🔔 <b>Новый лайк!</b>\n\n"
-                f"👤 <b>{current_user[
-                    'full_name'
-                ]}</b> лайкнул(а) твою анкету!\n"
+                f"👤 <b>{current_user['full_name']}</b> лайкнул(а) твою анкету!\n"
                 f"💬 Напиши ему(ей): {contact_display}\n\n"
                 f"📊 Посмотреть все лайки: «Кто лайкнул меня»"
             )
@@ -197,9 +195,8 @@ async def handle_anket_action(message: Message, state: FSMContext):
             )
 
             logging.info(
-                f"Уведомление о лайке отправлено пользователю {current_anket[
-                    'id'
-                ]}")
+                f"Уведомление о лайке отправлено пользователю {current_anket['id']}")
+
 
         except Exception as e:
             logging.error(f"Не удалось отправить уведомление о лайке: {e}")
@@ -236,9 +233,8 @@ async def handle_anket_action(message: Message, state: FSMContext):
                     parse_mode='HTML'
                 )
             except Exception as e:
-                logging.error(
-                    f"Не удалось отправить уведомление о взаимной симпатии: {e}"
-                )
+                logging.error(f"Не удалось отправить уведомление о взаимной симпатии: {e}")
+
 
     elif message.text == "Дизлайк 👎":
         # Сохраняем дизлайк в БД
