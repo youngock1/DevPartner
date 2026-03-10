@@ -25,6 +25,7 @@ async def registration_command(message: Message, state: FSMContext):
             reply_markup=get_update_anket_keyboard(),
             parse_mode='html')
     else:
+        await message.answer("✅ <b>Начинаем регистрацию...</b>", parse_mode='html')
         await message.answer(
             "<b>Введите ваше имя и фамилию:</b>", parse_mode='html'
         )
