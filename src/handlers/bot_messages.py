@@ -194,13 +194,9 @@ async def handle_anket_action(message: Message, state: FSMContext):
                 reply_markup=keyboard
             )
 
-<<<<<<< HEAD
-            logging.info(
-                f"Уведомление о лайке отправлено пользователю {current_anket['id']}")
 
-=======
             logging.info(f"Уведомление о лайке отправлено пользователю {current_anket['id']}")
->>>>>>> refs/remotes/origin/main
+
 
         except Exception as e:
             logging.error(f"Не удалось отправить уведомление о лайке: {e}")
