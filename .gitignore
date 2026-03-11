@@ -10,3 +10,4 @@ src/database/test.db
 test.db
 src/utils/__pycache__/states.cpython-312.pyc
 .venv
+.env
