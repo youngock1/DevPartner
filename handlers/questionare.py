@@ -164,9 +164,7 @@ async def get_about_self(message: Message, state: FSMContext):
                 f"<b>Стек:</b> {formatted_data['stack']}\n"
                 f"<b>Город:</b> {formatted_data['city']}\n\n"
                 f"<b>О себе:</b> {formatted_data['about_self']}\n\n"
-                f"<b>Дата регистрации:</b>\n{formatted_data[
-                    'registration_date'
-                ]} UTC(+3)"
+                f"<b>Дата регистрации:</b>\n{formatted_data['registration_date']} UTC(+3)"
             )
 
             await message.answer_photo(
@@ -191,9 +189,7 @@ async def get_about_self(message: Message, state: FSMContext):
             photo=str(data["photo"]),
             stack=data["stack"],
             city=data["city"],
-            registration_date=datetime.datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            ),
+            registration_date=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             about_self=data["about_self"]
         )
 
@@ -209,9 +205,7 @@ async def get_about_self(message: Message, state: FSMContext):
                 f"<b>Стек:</b> {formatted_data['stack']}\n"
                 f"<b>Город:</b> {formatted_data['city']}\n\n"
                 f"<b>О себе:</b> {formatted_data['about_self']}\n\n"
-                f"<b>Дата регистрации:</b>\n{formatted_data[
-                    'registration_date'
-                ]} UTC(+3)"
+                f"<b>Дата регистрации:</b>\n{formatted_data['registration_date']} UTC(+3)"
             )
 
             await message.answer_photo(
