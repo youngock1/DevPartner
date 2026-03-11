@@ -59,9 +59,7 @@ async def list_users(message: Message):
     users = db.get_all_users()
     text = "👥 <b>Список пользователей:</b>\n\n"
     for user in users[:10]:  # Первые 10
-        text += f"• ID: {user['id']} | {user['full_name']} | {user[
-            'age'
-        ]} лет\n"
+        text += f"• ID: {user['id']} | {user['full_name']} | {user['age']} лет\n"
     text += f"\nВсего: {len(users)} пользователей"
     await message.answer(text, parse_mode='HTML')
 
