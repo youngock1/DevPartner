@@ -279,9 +279,7 @@ async def export_data(message: Message):
     csv_bytes = output.getvalue().encode('utf-8-sig')
     input_file = BufferedInputFile(
         file=csv_bytes,
-        filename=f"users_export_{datetime.now().strftime(
-            constants.DATETIME_FORM
-        )}.csv"
+        filename=f"users_export_{datetime.now().strftime(constants.DATETIME_FORM)}.csv"
     )
 
     # Отправляем файл
