@@ -1,3 +1,4 @@
+"""----------IMPORT MODULES----------"""
 import asyncio
 from aiogram import Router, F
 from aiogram.types import Message, BufferedInputFile
@@ -11,17 +12,22 @@ from datetime import datetime
 from database.models import Base, init_db
 from .decorators import admin_only
 
+
+# Initilization 'Router'
 router = Router()
 
 
+# Class states for broadcast
 class BroadcastStates(StatesGroup):
     waiting_for_text = State()
 
 
+# Class states for delete db
 class ClearDBStates(StatesGroup):
     waiting_for_confirmation = State()
 
 
+# Handler command 'admin'
 @router.message(F.text == "/admin")
 @admin_only
 async def admin_panel(message: Message):
@@ -38,6 +44,7 @@ async def admin_panel(message: Message):
     await message.answer(text, parse_mode='HTML')
 
 
+# Handler command 'stats'(return main stats)
 @router.message(F.text == "/stats")
 @admin_only
 async def admin_stats(message: Message):
@@ -53,6 +60,7 @@ async def admin_stats(message: Message):
     await message.answer(text, parse_mode='HTML')
 
 
+# Handler command users(return list of users)
 @router.message(F.text == "/users")
 @admin_only
 async def list_users(message: Message):
@@ -64,6 +72,7 @@ async def list_users(message: Message):
     await message.answer(text, parse_mode='HTML')
 
 
+# Handler command 'broadcast'(sending message to all users in bot)
 @router.message(F.text == "/broadcast")
 @admin_only
 async def broadcast_start(message: Message, state: FSMContext):
@@ -75,6 +84,7 @@ async def broadcast_start(message: Message, state: FSMContext):
     await state.set_state(BroadcastStates.waiting_for_text)
 
 
+# Hanlder state waiting text for broadcast
 @router.message(BroadcastStates.waiting_for_text)
 @admin_only
 async def broadcast_send(message: Message, state: FSMContext):
@@ -132,6 +142,7 @@ async def broadcast_send(message: Message, state: FSMContext):
     await state.clear()
 
 
+# Handler command 'clear_db'(delete data from table)
 @router.message(F.text == "/clear_db")
 @admin_only
 async def clear_db_start(message: Message, state: FSMContext):
@@ -173,6 +184,7 @@ async def clear_db_start(message: Message, state: FSMContext):
         await state.clear()
 
 
+# Handler state waiting code for delete data from table 
 @router.message(ClearDBStates.waiting_for_confirmation)
 @admin_only
 async def clear_db_confirm(message: Message, state: FSMContext):
@@ -230,6 +242,7 @@ async def clear_db_confirm(message: Message, state: FSMContext):
         await state.clear()
 
 
+# Hanlder command 'export'(return *.csv file with table stats)
 @router.message(F.text == "/export")
 @admin_only
 async def export_data(message: Message):

@@ -1,3 +1,4 @@
+"""----------IMPORT MODULES----------"""
 from functools import wraps
 from aiogram.types import Message
 from database.constants import ADMIN_IDS

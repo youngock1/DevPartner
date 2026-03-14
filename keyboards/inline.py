@@ -1,5 +1,7 @@
+"""----------------IMPORT MODULES---------------"""
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+
 
 
 def get_delete_confirmation_keyboard() -> InlineKeyboardMarkup:
@@ -17,6 +19,7 @@ def get_delete_confirmation_keyboard() -> InlineKeyboardMarkup:
     return builder.as_markup()
 
 
+
 def get_update_anket_keyboard() -> InlineKeyboardMarkup:
     """Клавиатура подтверждения обновления анкеты"""
     builder = InlineKeyboardBuilder()
@@ -30,6 +33,7 @@ def get_update_anket_keyboard() -> InlineKeyboardMarkup:
     )
 
     return builder.as_markup()
+
 
 
 def get_profile_keyboard(username: str = None, user_id: int = None):

@@ -1,3 +1,4 @@
+"""----------IMPORT MODULES----------"""
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from database import db
@@ -8,9 +9,11 @@ from utils.states import Form_anket
 from aiogram.fsm.context import FSMContext
 import logging
 
+
 router = Router()  # Инициализация роутера
 
 
+# Handler callback data = "confirm_delete"
 @router.callback_query(F.data == "confirm_delete")
 async def confirm_delete(callback: CallbackQuery):
     """Подтверждение удаления анкеты"""
@@ -22,12 +25,13 @@ async def confirm_delete(callback: CallbackQuery):
         "✅ <b>Ваша анкета успешно удалена!</b>\n\n"
         "Если захотите вернуться, создайте новую анкету:\n"
         "/registr",
-        parse_mode='html'
-    )
+        parse_mode='html')
 
     await callback.answer("Анкета удалена")
 
 
+
+# Handler callback data = "cancel_delete"
 @router.callback_query(F.data == "cancel_delete")
 async def cancel_delete(callback: CallbackQuery):
     """Отмена удаления анкеты"""
@@ -41,6 +45,8 @@ async def cancel_delete(callback: CallbackQuery):
     await callback.answer("Удаление отменено")
 
 
+
+# Handler callback data = "confirm_update"
 @router.callback_query(F.data == 'confirm_update')
 async def confirm_update(callback: CallbackQuery, state: FSMContext):
     """Подтверждение обновления анкеты"""
@@ -53,6 +59,8 @@ async def confirm_update(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Form_anket.full_name)
 
 
+
+# Handler callback data = "cancel_update"
 @router.callback_query(F.data == 'cancel_update')
 async def cancel_update(callback: CallbackQuery):
     """Отмена обновления анкеты"""
@@ -63,6 +71,8 @@ async def cancel_update(callback: CallbackQuery):
     await callback.answer("✅ Обновление отменено!\n\n")
 
 
+
+# Handler callback data = "view_profile"
 @router.callback_query(F.data.startswith("view_profile:"))
 async def view_profile_callback(callback: CallbackQuery):
     """Показывает анкету пользователя"""

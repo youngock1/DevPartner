@@ -1,3 +1,4 @@
+"""----------IMPORT MODULES----------"""
 from aiogram.filters import CommandStart, Command
 from aiogram import Router
 from aiogram.types import Message
@@ -7,10 +8,14 @@ from database import db
 from database import constants
 from keyboards.inline import get_delete_confirmation_keyboard
 
-router = Router()  # Инициализация роутера
+
+# Инициализация роутера
+router = Router()  
 
 
-@router.message(CommandStart())  # Обработчик команды /start
+
+# Обработчик команды /start
+@router.message(CommandStart())  
 async def start_command(message: Message):
     full_name = message.from_user.full_name
     if db.check_user(message.from_user.id):
@@ -30,7 +35,8 @@ async def start_command(message: Message):
         )
 
 
-@router.message(Command('help'))  # Обработчик команды /help
+# Обработчик команды /help
+@router.message(Command('help'))
 async def help_command(message: Message):
     await message.answer(f"<b>Справка бота:</b>\n\n"
                          f"{constants.DEFAULT_MESSAGE}"
@@ -46,7 +52,8 @@ async def help_command(message: Message):
                          reply_markup=reply.rm_kb)
 
 
-@router.message(Command("profile"))  # Обработчик команды /profile
+# Обработчик команды /profile
+@router.message(Command("profile"))  
 async def profile_command(message: Message):
     data = db.read_user(message.from_user.id)
     if data:

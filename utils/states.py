@@ -1,3 +1,4 @@
+"""-----------IMPORT MODULES----------"""
 from aiogram.fsm.state import StatesGroup, State
 from datetime import datetime
 from typing import Set
@@ -5,12 +6,12 @@ from typing import Set
 
 # Класс для управления состоянием регистрации анкет
 class Form_anket(StatesGroup):
-    full_name = State()  # Состояние получения полного имени пользователя
-    age = State()        # Состояние получения возраста пользователя
-    photo = State()      # Состояние получения фотографии пользователя
-    stack = State()      # Состояние получения стэка разработки пользователя
-    city = State()       # Состояние получения города пользователя
-    about_self = State()  # Состояние получения описания о себе пользователя
+    full_name = State()  
+    age = State()        
+    photo = State()      
+    stack = State()      
+    city = State()       
+    about_self = State() 
 
 
 # Класс для управления состоянием пользователя

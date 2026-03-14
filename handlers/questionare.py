@@ -1,3 +1,4 @@
+"""----------IMPORT MODULES----------"""
 from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.filters import Command
@@ -11,11 +12,15 @@ import datetime
 from keyboards.inline import get_update_anket_keyboard
 from keyboards.reply import main_kb
 
+
+# Initialize 'Router'
 router = Router()
 
+# Initialize 'DatabaseManager'
 db = DatabaseManager()
 
 
+# Handler command 'registr'(registration anket in bot)
 @router.message(Command('registr'))
 async def registration_command(message: Message, state: FSMContext):
     if db.check_user(message.from_user.id):
@@ -32,6 +37,7 @@ async def registration_command(message: Message, state: FSMContext):
         await state.set_state(Form_anket.full_name)
 
 
+# Handler state get name user
 @router.message(Form_anket.full_name)
 async def get_full_name(message: Message, state: FSMContext):
     await state.update_data(full_name=message.text)
@@ -41,6 +47,7 @@ async def get_full_name(message: Message, state: FSMContext):
                          parse_mode='html')
 
 
+# Handler state get age user
 @router.message(Form_anket.age)
 async def get_age(message: Message, state: FSMContext):
     if message.text and message.text.isdigit():
@@ -57,6 +64,7 @@ async def get_age(message: Message, state: FSMContext):
         )
 
 
+# Handler state get photo user
 @router.message(Form_anket.photo, F.photo)
 async def get_photo(message: Message, state: FSMContext):
     photo_file_id = message.photo[-1].file_id
@@ -68,6 +76,7 @@ async def get_photo(message: Message, state: FSMContext):
                          )
 
 
+# Handler state get else photo in this state
 @router.message(Form_anket.photo)
 async def wrong_photo(message: Message, state: FSMContext):
     await message.answer(
@@ -77,6 +86,7 @@ async def wrong_photo(message: Message, state: FSMContext):
     )
 
 
+# Handler state get stack user
 @router.message(Form_anket.stack)
 async def get_stack(message: Message, state: FSMContext):
     if message.text:
@@ -91,6 +101,7 @@ async def get_stack(message: Message, state: FSMContext):
                             parse_mode='html')
 
 
+# Handler state get city user
 @router.message(Form_anket.city)
 async def get_city(message: Message, state: FSMContext):
     if message.text:
@@ -103,6 +114,8 @@ async def get_city(message: Message, state: FSMContext):
         await message.answer(f"<b>❌ Введите пожалуйста свой город или None.</b>",
                             parse_mode='html')
 
+
+# Function format data of user
 def format_user_data(user_data):
     """Форматирует данные пользователя для отображения"""
     if not user_data:
@@ -129,6 +142,7 @@ def format_user_data(user_data):
     return None
 
 
+# Handler state get about user
 @router.message(Form_anket.about_self)
 async def get_about_self(message: Message, state: FSMContext):
     about_self = message.text

@@ -1,3 +1,4 @@
+"""----------IMPORT MODULES----------"""
 from sqlalchemy import (
     create_engine,
     Column,
@@ -13,12 +14,18 @@ from datetime import datetime
 
 from . import constants
 
-Base = declarative_base()
+
+# Initilization class='declarativa_base'
+Base = declarative_base() 
 
 
+
+# Initilization class table 'User' in bot
 class User(Base):
+    # Parametres
     __tablename__ = 'users_ankets'
 
+    # Structure table
     id = Column(Integer, primary_key=True)
     full_name = Column(String(100), nullable=False)
     age = Column(Integer, nullable=False)
@@ -27,10 +34,11 @@ class User(Base):
     city = Column(String(100))
     registration_date = Column(
         String(20), default=lambda: datetime.now().strftime(
-            constants.DATETIME_FORM
-        ))
+            constants.DATETIME_FORM)
+        )
     about_self = Column(Text)
     like = Column(String(10), nullable=True)
+
 
     # Relationships
     likes_given = relationship(
@@ -58,8 +66,10 @@ class User(Base):
         cascade='all, delete-orphan'
     )
 
+
     def __repr__(self):
         return f"<User(id={self.id}, name={self.full_name}, age={self.age})>"
+
 
     def to_dict(self):
         """Convert user object to dictionary"""
@@ -76,12 +86,16 @@ class User(Base):
         }
 
 
+
+# Initilization class 'Like' in bot
 class Like(Base):
+    # Parametres
     __tablename__ = 'likes'
     __table_args__ = (
         UniqueConstraint('user_id', 'liked_user_id', name='unique_like'),
     )
 
+    # Structure table
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey(
         'users_ankets.id', ondelete='CASCADE'), nullable=False)
@@ -93,15 +107,18 @@ class Like(Base):
         ))
     is_mutual = Column(Integer, default=0)
 
+
     # Relationships
     user = relationship('User', foreign_keys=[
                         user_id], back_populates='likes_given')
     liked_user = relationship('User', foreign_keys=[
                               liked_user_id], back_populates='likes_received')
 
+
     def __repr__(self):
         return (f"<Like(id={self.id}, user={self.user_id} -> "
                 f"{self.liked_user_id}, mutual={self.is_mutual})>")
+
 
     def to_dict(self):
         """Convert like object to dictionary"""
@@ -114,12 +131,14 @@ class Like(Base):
         }
 
 
+# Initilization class 'Dislike' in bot
 class Dislike(Base):
     __tablename__ = 'dislikes'
     __table_args__ = (
         UniqueConstraint('user_id', 'disliked_user_id', name='unique_dislike'),
     )
 
+    # Structure table
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey(
         'users_ankets.id', ondelete='CASCADE'), nullable=False)
@@ -130,6 +149,7 @@ class Dislike(Base):
             constants.DATETIME_FORM
         ))
 
+
     # Relationships
     user = relationship('User', foreign_keys=[
                         user_id], back_populates='dislikes_given')
@@ -139,9 +159,11 @@ class Dislike(Base):
         back_populates='dislikes_received'
     )
 
+
     def __repr__(self):
         return (f"<Dislike(id={self.id}, user={self.user_id} -> "
                 f"{self.disliked_user_id})>")
+
 
     def to_dict(self):
         """Convert dislike object to dictionary"""
@@ -153,6 +175,7 @@ class Dislike(Base):
         }
 
 
+# Function initilize DB
 def init_db(db_path=None):
     """Initialize database and create tables"""
     if db_path is None:
@@ -168,6 +191,7 @@ def init_db(db_path=None):
     return engine
 
 
+# Function creating session
 def get_session(engine):
     """Create a new session"""
     Session = sessionmaker(bind=engine)

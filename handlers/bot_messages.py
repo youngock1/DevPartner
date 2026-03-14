@@ -1,3 +1,4 @@
+"""----------IMPORT MODULES----------"""
 from aiogram.types import Message
 from aiogram import Router, F, Bot
 from typing import Dict
@@ -12,18 +13,22 @@ from database import crud
 
 import logging
 
-db = crud.DatabaseManager()
 
+# Create object of class 'DatabaseManager'
+db = crud.DatabaseManager()
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
 
+# Main objects 
 bot = Bot(token="8412234786:AAHY1c4maly_mlS0sf1thPNc7FZcUZFGdao")
 router = Router()
 
+# Initialize 'user_data'
 user_data: Dict[int, UserData] = {}
 
 
+# MAIN FUNCTIONS
 def get_user_data(user_id: int) -> UserData:
     """Получает или создает данные пользователя"""
     if user_id not in user_data:
@@ -249,6 +254,7 @@ async def handle_anket_action(message: Message, state: FSMContext):
     await show_next_anket(user_id, state)
 
 
+# Handler
 @router.message(UserState.viewing_ankets, F.text == "Прекратить просмотр 💤")
 async def exit_search(message: Message, state: FSMContext):
     """Выход из режима просмотра"""
@@ -259,6 +265,7 @@ async def exit_search(message: Message, state: FSMContext):
     await state.clear()
 
 
+# Hanlder
 @router.message(F.text == 'Смотреть анкеты 🔍')
 async def start_search(message: Message, state: FSMContext):
     """Начинает просмотр анкет"""
@@ -290,6 +297,7 @@ async def start_search(message: Message, state: FSMContext):
     await show_next_anket(user_id, state)
 
 
+# Handler
 @router.message(F.text == 'Заполнить анкету заново 🔄')
 async def update_profile(message: Message):
     user_id = message.from_user.id
@@ -332,6 +340,7 @@ async def show_mutual_likes(message: Message):
     await message.answer(text, parse_mode='HTML')
 
 
+# Handler
 @router.message(F.text == "Статистика 📊")
 async def show_stats(message: Message):
     """Показывает статистику"""
@@ -357,6 +366,7 @@ async def show_stats(message: Message):
     await message.answer(stats_text, parse_mode='HTML')
 
 
+# Handler
 @router.message(F.text == "Мои лайки 👍")
 async def show_my_likes(message: Message, bot: Bot):
     """Показывает кого лайкнул пользователь"""
@@ -376,6 +386,7 @@ async def show_my_likes(message: Message, bot: Bot):
     await message.answer(text, parse_mode='HTML')
 
 
+# Handler
 @router.message(F.text == "Кто лайкнул меня 🩷")
 async def show_who_liked_me(message: Message):
     """Показывает кто лайкнул пользователя"""
@@ -395,6 +406,7 @@ async def show_who_liked_me(message: Message):
     await message.answer(text, parse_mode='HTML')
 
 
+# Hanlder all another messages
 @router.message()
 async def handle_all_messages(message: Message, state: FSMContext):
     """Обработчик всех остальных сообщений"""
