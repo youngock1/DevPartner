@@ -61,7 +61,7 @@ async def profile_command(message: Message):
     if data:
         await message.answer_photo(
             photo=data['photo'], caption=f'<b>ID:</b>    {int(data["id"])}\n'
-            f'<b>Name:</b>  {data["full_anme"]}\n'
+            f'<b>Name:</b>  {data["full_name"]}\n'
             f'<b>Age:</b>   {data["age"]} years\n\n'
             f'<b>Stack:</b> {data["stack"]}\n'
             f'<b>City:</b>  {data["city"]}\n\n'
