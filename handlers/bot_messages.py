@@ -21,7 +21,7 @@ db = crud.DatabaseManager()
 logging.basicConfig(level=logging.INFO)
 
 # Main objects 
-bot = Bot(token="8412234786:AAHY1c4maly_mlS0sf1thPNc7FZcUZFGdao")
+bot = Bot(token="BOT_TOKEN")
 router = Router()
 
 # Initialize 'user_data'

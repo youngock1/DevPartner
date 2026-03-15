@@ -3,7 +3,7 @@ from aiogram.filters import CommandStart, Command
 from aiogram import Router
 from aiogram.types import Message
 from keyboards import reply
-from database import db
+from database import crud
 
 from database import constants
 from keyboards.inline import get_delete_confirmation_keyboard
@@ -12,6 +12,8 @@ from keyboards.inline import get_delete_confirmation_keyboard
 # Инициализация роутера
 router = Router()  
 
+# Initilization DB
+db = crud.DatabaseManager()
 
 
 # Обработчик команды /start
@@ -58,13 +60,13 @@ async def profile_command(message: Message):
     data = db.read_user(message.from_user.id)
     if data:
         await message.answer_photo(
-            photo=data[0][3], caption=f'<b>ID:</b>    {int(data[0][0])}\n'
-            f'<b>Name:</b>  {data[0][1]}\n'
-            f'<b>Age:</b>   {data[0][2]} years\n\n'
-            f'<b>Stack:</b> {data[0][4]}\n'
-            f'<b>City:</b>  {data[0][5]}\n\n'
-            f'<b>About:</b> {data[0][7]}\n\n'
-            f'<b>Registartion date:</b>\n{data[0][6]}UTC(+3)',
+            photo=data['photo'], caption=f'<b>ID:</b>    {int(data['id'])}\n'
+            f'<b>Name:</b>  {data['full_anme']}\n'
+            f'<b>Age:</b>   {data['age']} years\n\n'
+            f'<b>Stack:</b> {data['stack']}\n'
+            f'<b>City:</b>  {data['city']}\n\n'
+            f'<b>About:</b> {data['about_self']}\n\n'
+            f'<b>Registartion date:</b>\n{data['registration_date']}UTC(+3)',
             parse_mode='html'
         )
     else:
