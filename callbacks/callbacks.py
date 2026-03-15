@@ -1,7 +1,7 @@
 """----------IMPORT MODULES----------"""
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
-from database import db
+from database import crud
 
 from keyboards.reply import rm_kb
 
@@ -10,7 +10,12 @@ from aiogram.fsm.context import FSMContext
 import logging
 
 
-router = Router()  # Инициализация роутера
+# Инициализация роутера
+router = Router()
+
+# Initilization DB
+db = crud.DatabaseManager()
+
 
 
 # Handler callback data = "confirm_delete"
