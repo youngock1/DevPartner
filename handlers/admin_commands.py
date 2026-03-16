@@ -4,7 +4,7 @@ from aiogram import Router, F
 from aiogram.types import Message, BufferedInputFile
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from database import db, constants
+from database import crud, constants
 import io
 import csv
 from datetime import datetime
@@ -15,6 +15,10 @@ from .decorators import admin_only
 
 # Initilization 'Router'
 router = Router()
+
+
+# Initilization DB
+db = crud.DatabaseManager()
 
 
 # Class states for broadcast
