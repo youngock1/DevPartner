@@ -109,6 +109,7 @@ def update_user(id, full_name: str, age: int,
 def delete_user(id):
     """Удаление пользователя из таблицы"""
     cursor.execute("DELETE FROM users_ankets WHERE id=?", (id,))
+    conn.commit()
 
 
 def check_user(id):
