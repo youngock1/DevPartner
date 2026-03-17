@@ -13,6 +13,7 @@ import os
 
 from handlers.admin_commands import router as admin_router
 
+
 load_dotenv()  # Загружаем переменные окружения
 
 

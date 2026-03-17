@@ -1,4 +1,4 @@
-SQLALCHEMY_DATABASE_URI = "sqlite:///test.db"
+SQLALCHEMY_DATABASE_URI = "sqlite:///users.db"
 
 USER_FIELDS = ('id', 'full_name', 'age', 'photo', 'stack',
                'city', 'registration_date', 'about_self', 'like')

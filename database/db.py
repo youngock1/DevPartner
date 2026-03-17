@@ -15,7 +15,7 @@ DISLIKE_PLACEHOLDERS = ', '.join(['?'] * len(DISLIKE_FIELDS))
 LIKE_FIELDS_STRING = ', '.join(LIKE_FIELDS)
 LIKE_PLACEHOLDERS = ', '.join(['?'] * len(LIKE_FIELDS))
 
-conn = sqlite3.connect(database='test.db', check_same_thread=False)
+conn = sqlite3.connect(database='users.db', check_same_thread=False)
 conn.row_factory = sqlite3.Row  # Для доступа по именам полей
 cursor = conn.cursor()
 

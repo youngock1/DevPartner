@@ -1,3 +1,2 @@
-./test.db
-./.venv
-./.env
+.venv
+.env

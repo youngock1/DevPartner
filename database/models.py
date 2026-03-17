@@ -179,11 +179,11 @@ class Dislike(Base):
 def init_db(db_path=None):
     """Initialize database and create tables"""
     if db_path is None:
-        db_path = 'sqlite:///test.db'  # Запасной вариант
+        db_path = 'sqlite:///users.db'  # Запасной вариант
 
     # Убедимся, что db_path - строка
     if not isinstance(db_path, str):
-        db_path = 'sqlite:///test.db'
+        db_path = 'sqlite:///users.db'
 
     engine = create_engine(db_path, echo=False, connect_args={
                            'check_same_thread': False})

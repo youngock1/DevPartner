@@ -11,8 +11,13 @@ from keyboards.inline import get_update_anket_keyboard, get_profile_keyboard
 
 from database import crud
 
-import logging
+import logging, os
 
+from dotenv import load_dotenv
+
+
+# Load venv variables
+load_dotenv()
 
 # Create object of class 'DatabaseManager'
 db = crud.DatabaseManager()
@@ -21,7 +26,7 @@ db = crud.DatabaseManager()
 logging.basicConfig(level=logging.INFO)
 
 # Main objects 
-bot = Bot(token="8412234786:AAHY1c4maly_mlS0sf1thPNc7FZcUZFGdao")
+bot = Bot(token=os.getenv("BOT_TOKEN"))
 router = Router()
 
 # Initialize 'user_data'
